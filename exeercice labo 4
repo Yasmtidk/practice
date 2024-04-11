@@ -1,0 +1,512 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+static char inverser_casse(char lettre);
+static void test_inverser_case(void);
+
+static void repeter_chaine(char* destination, char* source, int nb_iteration);
+static void test_repeter_chaine(void);
+
+static void remplacer_caractere(char* chaine, char chercher, char remplacement);
+static void test_remplacer_caractere(void);
+
+int debut_prochain_mot(char* chaine);
+static void test_debut_prochain_mot(void);
+
+static void rtrim(char* chaine);
+static void test_rtrim(void);
+
+static void retirer_caractere(char* chaine, char chercher);
+static void test_retirer_caractere(void);
+
+int valider_no_piece(char* chaine);
+static void test_valider_no_piece(void);
+
+int trouver_annee(char* chaine);
+static void test_trouver_annee(void);
+
+int main()
+{
+    test_inverser_case();
+    test_repeter_chaine();
+    test_remplacer_caractere();
+    test_debut_prochain_mot();
+    test_rtrim();
+    test_retirer_caractere();
+    test_valider_no_piece();
+    test_trouver_annee();
+
+    return EXIT_SUCCESS;
+}
+
+static char inverser_casse(char lettre)
+{
+    char lettre_inverser;
+
+    if(islower(lettre))
+    {
+        lettre_inverser = toupper(lettre);
+    }
+
+    else if(isupper(lettre))
+        lettre_inverser = tolower(lettre);
+
+    else
+        lettre_inverser = lettre;
+
+    return lettre_inverser;
+}
+
+static void test_inverser_case()
+{
+    int no_test;
+    char lettre;
+    char attendu;
+    char resultat;
+
+    printf("\n--- TEST INVERSER CASE --- \n");
+    printf("\n");
+
+    no_test = 1;
+    lettre = 'a';
+    attendu = 'A';
+    resultat = inverser_casse(lettre);
+    printf("Test %d -   donnee  : %c\n", no_test, lettre);
+    printf("\t attendue  : %c\n", attendu);
+    printf("\t  obtenue  : %c\n", resultat);
+    printf("\n");
+
+
+    no_test = 2;
+    lettre = '!';
+    attendu = '!';
+    resultat = inverser_casse(lettre);
+    printf("Test %d -   donnee  : %c\n", no_test, lettre);
+    printf("\t attendue  : %c\n", attendu);
+    printf("\t  obtenue  : %c\n", resultat);
+    printf("\n");
+
+
+    no_test = 3;
+    lettre = 'G';
+    attendu = 'g';
+    resultat = inverser_casse(lettre);
+    printf("Test %d -   donnee  : %c\n", no_test, lettre);
+    printf("\t attendue  : %c\n", attendu);
+    printf("\t  obtenue  : %c\n", resultat);
+    printf("\n");
+
+}
+
+static void repeter_chaine(char* destination, char* source, int nb_iteration)
+{
+    for(int i = 0; i < nb_iteration; i++)
+    {
+        strcat(destination, source);
+    }
+}
+
+
+static void test_repeter_chaine()
+{
+    int no_test;
+    int repetition;
+    char* chaine = "ha! ";
+    char resultat[25] = {'\0'};
+    char* attendu;
+
+    printf("\n--- TEST REPETER CHAINE --- \n");
+    printf("\n");
+
+    *resultat = '\0';           //Il faut "effacer" le contenu du resultat après chaque test.
+    no_test = 1;
+    repetition = 1;
+    attendu = "ha!";
+    repeter_chaine(resultat, chaine, repetition);
+    printf("Test %d -  %s %dx \n", no_test, chaine, repetition);
+    printf("\t attendue  : %s\n", attendu);
+    printf("\t  obtenue  : %s\n", resultat);
+    printf("\n");
+
+
+    *resultat = '\0';           //Il faut "effacer" le contenu du resultat après chaque test.
+    no_test = 2;
+    repetition = 5;
+    attendu = "ha! ha! ha! ha! ha!";
+    repeter_chaine(resultat, chaine, repetition);
+    printf("Test %d -  %s %dx \n", no_test, chaine, repetition);
+    printf("\t attendue  : %s\n", attendu);
+    printf("\t  obtenue  : %s\n", resultat);
+    printf("\n");
+
+    *resultat = '\0';           //Il faut "effacer" le contenu du resultat après chaque test.
+    no_test = 3;
+    repetition = 0;
+    attendu = " ";
+    repeter_chaine(resultat, chaine, repetition);
+    printf("Test %d -  %s %dx \n", no_test, chaine, repetition);
+    printf("\t attendue  : %s\n", attendu);
+    printf("\t  obtenue  : %s\n", resultat);
+    printf("\n");
+
+}
+
+static void remplacer_caractere(char* chaine, char chercher, char remplacement)
+{
+    int longeur = strlen(chaine);
+    for (int i = 0 ; i < longeur; i++)
+    {
+        if(chaine[i] == chercher)
+        {
+            chaine[i] = remplacement;
+        }
+    }
+}
+
+static void test_remplacer_caractere()
+{
+    int no_test;
+    char chaine [30] = "ici, on a un test utile hiii ";
+    char chaine1[30] = "ici, on a un test utile hiii ";
+    char chaine2[30] = "ici, on a un test utile hiii ";
+    char* attendu;
+    char remplacer;
+    char remplacement;
+
+    printf("\n--- TEST REMPLACER CARACTERE --- \n");
+    printf("\n");
+
+    no_test = 1;
+    remplacer = 'i';
+    remplacement = 'X';
+    attendu = "XcX, on a un test utXle hXXX";
+    remplacer_caractere(chaine1, remplacer, remplacement);
+    printf("Test %d -  %s :: %c --> %c \n", no_test, chaine, remplacer, remplacement);
+    printf("\t attendue  : %s\n", attendu);
+    printf("\t  obtenue  : %s\n", chaine1);
+    printf("\n");
+
+    no_test = 2;
+    remplacer = 'z';
+    remplacement = 'X';
+    attendu = "ici, on a un test utile hiii";
+    remplacer_caractere(chaine1, remplacer, remplacement);
+    printf("Test %d -  %s :: %c --> %c \n", no_test, chaine, remplacer, remplacement);
+    printf("\t attendue  : %s\n", attendu);
+    printf("\t  obtenue  : %s\n", chaine2);
+    printf("\n");
+
+}
+
+int debut_prochain_mot(char* chaine)
+{
+    int i = 0;
+    int resultat = -1;
+
+    while(chaine[i] != '\0' && resultat == -1)
+    {
+        if(('A' <= chaine[i] && chaine[i] <= 'Z' ||
+            'a' <= chaine[i] && chaine[i] <= 'z'))
+            resultat = i;
+
+        i++;
+    }
+
+    return resultat;
+}
+
+
+static void test_debut_prochain_mot(void)
+{
+    int no_test;
+    char chaine1[30] = "[].{}.Voici une phrase.";
+    char chaine2[30] = "..!?!?..";
+    int attendu;
+    int obtenu;
+
+    printf("\n--- TEST DEBUT PROCHAIN MOT --- \n");
+    printf("\n");
+
+    no_test = 1;
+    attendu = 6;
+    obtenu = debut_prochain_mot(chaine1);
+    printf("Test %d -  %s \n", no_test, chaine1);
+    printf("\t attendue  : %d\n", attendu);
+    printf("\t  obtenue  : %d\n", obtenu);
+    printf("\n");
+
+    no_test = 2;
+    attendu = -1;
+    obtenu = debut_prochain_mot(chaine2);
+    printf("Test %d -  %s \n", no_test, chaine2);
+    printf("\t attendue  : %d\n", attendu);
+    printf("\t  obtenue  : %d\n", obtenu);
+    printf("\n");
+
+}
+
+
+static void rtrim(char* chaine)
+{
+    while(*chaine != '\0')
+    {
+        chaine++;
+    }
+
+    chaine--;
+
+    while(*chaine == '\n' || *chaine == '\t' || *chaine == ' ')
+    {
+        *chaine = '\0';
+        chaine--;
+    }
+}
+
+
+static void test_rtrim(void)
+{
+    int no_test;
+    char chaine1[60] = "Voici une phrase avec trailing spaces                ";
+    char chaine2[60]= "Voici une phrase sans trailing spaces";
+    char* attendu;
+
+    printf("\n--- TEST RTRIM --- \n");
+    printf("\n");
+
+    no_test = 1;
+    attendu = "Voici une phrase avec trailing spaces";
+    printf("Test %d -  %s|\n", no_test, chaine1);
+    rtrim(chaine1);
+    printf("\t attendue  : %s|\n", attendu);
+    printf("\t  obtenue  : %s|\n", chaine1);
+    printf("\n");
+
+    no_test = 2;
+    attendu = "Voici une phrase sans trailing spaces";
+    printf("Test %d -  %s|\n", no_test, chaine2);
+    rtrim(chaine2);
+    printf("\t attendue  : %s|\n", attendu);
+    printf("\t  obtenue  : %s|\n", chaine2);
+    printf("\n");
+}
+
+
+static void retirer_caractere(char* chaine, char chercher)
+{
+
+    int retrait = 0;
+
+    while(*chaine != '\0')
+    {
+        if(*chaine == chercher)
+        {
+            retrait++;
+        }
+        else
+        {
+            *(chaine - retrait) = *chaine;
+        }
+
+        chaine++;
+    }
+
+    *(chaine - retrait) = '\0';
+}
+
+static void test_retirer_caractere(void)
+{
+    int no_test;
+    char chaine [30] = "ici, on a un test utile hiii ";
+    char chaine1[30] = "ici, on a un test utile hiii ";
+    char chaine2[30] = "ici, on a un test utile hiii ";
+    char* attendu;
+    char retirer;
+
+    printf("\n--- TEST RETIRER CARACTERE --- \n");
+    printf("\n");
+
+    no_test = 1;
+    retirer = 'i';
+    attendu = "c, on a un test utle h";
+    printf("Test %d :: %s - %c \n", no_test, chaine, retirer);
+    retirer_caractere(chaine1, retirer);
+    printf("\t  attendue  : %s\n", attendu);
+    printf("\t   obtenue  : %s\n", chaine1);
+    printf("\n");
+
+
+    no_test = 2;
+    retirer = 'x';
+    attendu = "ici, on a un test utile hiii";
+    printf("Test %d :: %s - %c \n", no_test, chaine, retirer);
+    retirer_caractere(chaine2, retirer);
+    printf("\t  attendue  : %s\n", attendu);
+    printf("\t   obtenue  : %s\n", chaine2);
+    printf("\n");
+
+}
+
+int valider_no_piece(char* chaine)
+{
+    int resultat = 1;       //On suppose que tous les critère sont respecté.
+
+    //On vérifie la longueur de la chaine
+    int longueur = strlen(chaine);
+    if(longueur != 10)
+        resultat = 0 ;
+
+        //Maintenant qu'on s'est qu'il y a suffisamenet d'espace, on peut accéder aux autres symboles.
+    else
+    {
+        //On vérifie les deux traits d'unions;
+        if(chaine[3] != '-' || chaine[7] != '-')
+            resultat = 0 ;
+
+        //On vérifie les trois majuscules
+        for(int i = 0; i < 3; i++)
+            if(!isupper(chaine[i]))
+                resultat = 0 ;
+
+        //On vérifie les chiffes majuscules
+        for(int i = 4; i < longueur; i++)
+            if(i !=7 && !isdigit(chaine[i]))
+                resultat = 0 ;
+    }
+
+    return resultat;
+}
+
+
+static void test_valider_no_piece(void)
+{
+    int no_test;
+    char* chaine;
+    int attendu;
+    int obtenue;
+
+    printf("\n--- TEST VALIDER NO PIECE --- \n");
+    printf("\n");
+
+    no_test = 1;
+    attendu = 0;
+    chaine = "LL-CC";
+    printf("Test %d - trop court : %s \n", no_test, chaine);
+    obtenue = valider_no_piece(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+
+    no_test = 2;
+    attendu = 0;
+    chaine = "abc-CCC-CC";
+    printf("Test %d - pas de majuscule : %s \n", no_test, chaine);
+    obtenue = valider_no_piece(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+    no_test = 3;
+    attendu = 0;
+    chaine = "ABC-CCC-89";
+    printf("Test %d - centre pas chiffre : %s \n", no_test, chaine);
+    obtenue = valider_no_piece(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+    no_test = 4;
+    attendu = 0;
+    chaine = "ABC-123-CC";
+    printf("Test %d - fin pas chiffre : %s \n", no_test, chaine);
+    obtenue = valider_no_piece(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+    no_test = 5;
+    attendu = 0;
+    chaine = "ABC+123+89";
+    printf("Test %d - pas de trait d'union : %s \n", no_test, chaine);
+    obtenue = valider_no_piece(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+    no_test = 6;
+    attendu = 1;
+    chaine = "ABC-123-89";
+    printf("Test %d - all good : %s \n", no_test, chaine);
+    obtenue = valider_no_piece(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+}
+
+int trouver_annee(char* chaine)
+{
+    int resultat = -1;
+
+    //On vérifie la longueur de la chaine
+    int longueur = strlen(chaine);
+
+    for (int i = 0; i <= longueur; i++)
+    {
+        if(isdigit(chaine[i]))
+            return i;
+    }
+
+
+    return resultat;
+}
+
+static void test_trouver_annee(void)
+{
+    int no_test;
+    char* chaine;
+    int attendu;
+    int obtenue;
+
+    printf("\n--- TEST TROUVER ANNEE --- \n");
+    printf("\n");
+
+    no_test = 1;
+    attendu = 0;
+    chaine = "2022 est une annee.";
+    printf("Test %d - %s \n", no_test, chaine);
+    obtenue = trouver_annee(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+
+    no_test = 2;
+    attendu = 11;
+    chaine = "Une annee, 2022, est.";
+    printf("Test %d - %s \n", no_test, chaine);
+    obtenue = trouver_annee(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+    no_test = 3;
+    attendu = 15;
+    chaine = "Nous sommes en 2022";
+    printf("Test %d - %s \n", no_test, chaine);
+    obtenue = trouver_annee(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+
+    no_test = 4;
+    attendu = -1;
+    chaine = "En quelle annee sommes-nous?";
+    printf("Test %d - %s \n", no_test, chaine);
+    obtenue = trouver_annee(chaine);
+    printf("\t  attendue  : %d\n", attendu);
+    printf("\t   obtenue  : %d\n", obtenue);
+    printf("\n");
+}
+
